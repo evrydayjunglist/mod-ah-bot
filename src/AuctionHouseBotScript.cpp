@@ -14,7 +14,7 @@ class AHBot_WorldScript : public WorldScript
 public:
     AHBot_WorldScript() : WorldScript("AHBot_WorldScript") { }
 
-    void OnBeforeConfigLoad(bool /*reload*/) override
+    void OnAfterConfigLoad(bool /*reload*/) override
     {
         auctionbot->InitializeConfiguration();
     }
@@ -50,16 +50,6 @@ public:
     {
         if (oldBidder && !newBidder)
             oldBidder->GetSession()->SendAuctionBidderNotification(auction->GetHouseId(), auction->Id, ObjectGuid::Create<HighGuid::Player>(auctionbot->GetAHBplayerGUID()), newPrice, auction->GetAuctionOutBid(), auction->item_template);
-    }
-
-    void OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
-    {
-        auctionbot->IncrementItemCounts(auction);
-    }
-
-    void OnAuctionRemove(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
-    {
-        auctionbot->DecrementItemCounts(auction, auction->item_template);
     }
 
     void OnBeforeAuctionHouseMgrUpdate() override
